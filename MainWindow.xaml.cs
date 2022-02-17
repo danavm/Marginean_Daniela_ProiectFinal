@@ -75,9 +75,11 @@ namespace Marginean_Daniela_ProiectFinal
         ////----------Buses
         private void NewBus_Click(object sender, RoutedEventArgs e)
         {
+            SetBusValidationBinding();
             action = ActionState.New;
             BusDetailsEnabled(true);
             busDataGrid.SelectedItem = null;
+            
         }
         private void EditBus_Click(object sender, RoutedEventArgs e)
         {
@@ -89,6 +91,7 @@ namespace Marginean_Daniela_ProiectFinal
             {
                 action = ActionState.Edit;
                 BusDetailsEnabled(true);
+                SetBusValidationBinding();
                 
             }  
         }
@@ -176,6 +179,7 @@ namespace Marginean_Daniela_ProiectFinal
             action = ActionState.Nothing;
             // disable fields
             BusDetailsEnabled(false);
+            //ClearBusValidationBinding();
         }
 
         private void BusDetailsEnabled(bool enable)
@@ -204,6 +208,7 @@ namespace Marginean_Daniela_ProiectFinal
             {
                 action = ActionState.Edit;
                 DriverDetailsEnabled(true);
+                SetDriverValidationBinding();
             }
         }
         private void DeleteDriver_Click(object sender, RoutedEventArgs e)
@@ -314,6 +319,7 @@ namespace Marginean_Daniela_ProiectFinal
             {
                 action = ActionState.Edit;
                 RouteDetailsEnabled(true);
+                SetRouteValidationBinding();
             }
         }
         private void DeleteRoute_Click(object sender, RoutedEventArgs e)
@@ -419,6 +425,7 @@ namespace Marginean_Daniela_ProiectFinal
             {
                 action = ActionState.Edit;
                 ShiftDetailsEnabled(true);
+                SetShiftValidationBinding();
             }
         }
         private void DeleteShift_Click(object sender, RoutedEventArgs e)
@@ -683,6 +690,164 @@ namespace Marginean_Daniela_ProiectFinal
                                  route.EndRoute
                              };
            plannerViewSource.Source = query.ToList();
+        }
+
+        ///--- validations
+        ///--- bus validations
+        private void ClearBusValidationBinding()
+        {
+            BindingOperations.ClearBinding(capacityTextBox, TextBox.TextProperty);
+            BindingOperations.ClearBinding(typeTextBox, TextBox.TextProperty);
+            BindingOperations.ClearBinding(engineTypeTextBox, TextBox.TextProperty);
+            BindingOperations.ClearBinding(licensePlateTextBox, TextBox.TextProperty);
+        }
+        private void SetBusValidationBinding()
+        {
+            ClearBusValidationBinding();
+
+            Binding capacityValidationBinding = new Binding();
+            capacityValidationBinding.Source = busViewSource;
+            capacityValidationBinding.Path = new PropertyPath("Capacity");
+            capacityValidationBinding.NotifyOnValidationError = true;
+            capacityValidationBinding.Mode = BindingMode.TwoWay;
+            capacityValidationBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            capacityValidationBinding.ValidationRules.Add(new NumericValidator());
+            capacityTextBox.SetBinding(TextBox.TextProperty, capacityValidationBinding);
+
+            Binding typeValidationBinding = new Binding();
+            typeValidationBinding.Source = busViewSource;
+            typeValidationBinding.Path = new PropertyPath("Type");
+            typeValidationBinding.NotifyOnValidationError = true;
+            typeValidationBinding.Mode = BindingMode.TwoWay;
+            typeValidationBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            typeValidationBinding.ValidationRules.Add(new StringNotEmpty());
+            typeTextBox.SetBinding(TextBox.TextProperty, typeValidationBinding);
+
+            Binding engineTypeValidationBinding = new Binding();
+            engineTypeValidationBinding.Source = busViewSource;
+            engineTypeValidationBinding.Path = new PropertyPath("EngineType");
+            engineTypeValidationBinding.NotifyOnValidationError = true;
+            engineTypeValidationBinding.Mode = BindingMode.TwoWay;
+            engineTypeValidationBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            engineTypeValidationBinding.ValidationRules.Add(new StringNotEmpty());
+            engineTypeTextBox.SetBinding(TextBox.TextProperty, engineTypeValidationBinding);
+
+            Binding licensePlateValidationBinding = new Binding();
+            licensePlateValidationBinding.Source = busViewSource;
+            licensePlateValidationBinding.Path = new PropertyPath("LicensePlate");
+            licensePlateValidationBinding.NotifyOnValidationError = true;
+            licensePlateValidationBinding.Mode = BindingMode.TwoWay;
+            licensePlateValidationBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            licensePlateValidationBinding.ValidationRules.Add(new StringNotEmpty());
+            licensePlateTextBox.SetBinding(TextBox.TextProperty, licensePlateValidationBinding);
+        }
+
+        ///--- driver validations
+        private void ClearDriverValidationBinding()
+        {
+            BindingOperations.ClearBinding(firstNameTextBox, TextBox.TextProperty);
+            BindingOperations.ClearBinding(lastName_TextBox, TextBox.TextProperty);
+            BindingOperations.ClearBinding(addressTextBox, TextBox.TextProperty);
+        }
+        private void SetDriverValidationBinding()
+        {
+            ClearDriverValidationBinding();
+
+            Binding firstNameValidationBinding = new Binding();
+            firstNameValidationBinding.Source = driverViewSource;
+            firstNameValidationBinding.Path = new PropertyPath("FirstName");
+            firstNameValidationBinding.NotifyOnValidationError = true;
+            firstNameValidationBinding.Mode = BindingMode.TwoWay;
+            firstNameValidationBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            firstNameValidationBinding.ValidationRules.Add(new StringNotEmpty());
+            firstNameTextBox.SetBinding(TextBox.TextProperty, firstNameValidationBinding);
+
+            Binding lastNameValidationBinding = new Binding();
+            lastNameValidationBinding.Source = driverViewSource;
+            lastNameValidationBinding.Path = new PropertyPath("LastName_");
+            lastNameValidationBinding.NotifyOnValidationError = true;
+            lastNameValidationBinding.Mode = BindingMode.TwoWay;
+            lastNameValidationBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            lastNameValidationBinding.ValidationRules.Add(new StringNotEmpty());
+            lastName_TextBox.SetBinding(TextBox.TextProperty, lastNameValidationBinding);
+
+            Binding addressValidationBinding = new Binding();
+            addressValidationBinding.Source = driverViewSource;
+            addressValidationBinding.Path = new PropertyPath("Address");
+            addressValidationBinding.NotifyOnValidationError = true;
+            addressValidationBinding.Mode = BindingMode.TwoWay;
+            addressValidationBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            addressValidationBinding.ValidationRules.Add(new StringNotEmpty());
+            addressTextBox.SetBinding(TextBox.TextProperty, addressValidationBinding);
+
+        }
+
+        ///--- route validations
+        private void ClearRouteValidationBinding()
+        {
+            BindingOperations.ClearBinding(startRouteTextBox, TextBox.TextProperty);
+            BindingOperations.ClearBinding(endRouteTextBox, TextBox.TextProperty);
+        }
+        private void SetRouteValidationBinding()
+        {
+            ClearRouteValidationBinding();
+
+            Binding startRouteValidationBinding = new Binding();
+            startRouteValidationBinding.Source = routeViewSource;
+            startRouteValidationBinding.Path = new PropertyPath("StartRoute");
+            startRouteValidationBinding.NotifyOnValidationError = true;
+            startRouteValidationBinding.Mode = BindingMode.TwoWay;
+            startRouteValidationBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            startRouteValidationBinding.ValidationRules.Add(new StringNotEmpty());
+            startRouteTextBox.SetBinding(TextBox.TextProperty, startRouteValidationBinding);
+
+            Binding endRouteValidationBinding = new Binding();
+            endRouteValidationBinding.Source = routeViewSource;
+            endRouteValidationBinding.Path = new PropertyPath("EndRoute");
+            endRouteValidationBinding.NotifyOnValidationError = true;
+            endRouteValidationBinding.Mode = BindingMode.TwoWay;
+            endRouteValidationBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            endRouteValidationBinding.ValidationRules.Add(new StringNotEmpty());
+            endRouteTextBox.SetBinding(TextBox.TextProperty, endRouteValidationBinding);
+        }
+
+        ///--- shift validations
+        private void ClearShiftValidationBinding()
+        {
+            BindingOperations.ClearBinding(shiftNameTextBox, TextBox.TextProperty);
+            BindingOperations.ClearBinding(startShiftTextBox, TextBox.TextProperty);
+            BindingOperations.ClearBinding(endShiftTextBox, TextBox.TextProperty);
+        }
+        private void SetShiftValidationBinding()
+        {
+            ClearShiftValidationBinding();
+
+            Binding shiftNameValidationBinding = new Binding();
+            shiftNameValidationBinding.Source = shiftViewSource;
+            shiftNameValidationBinding.Path = new PropertyPath("ShiftName");
+            shiftNameValidationBinding.NotifyOnValidationError = true;
+            shiftNameValidationBinding.Mode = BindingMode.TwoWay;
+            shiftNameValidationBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            shiftNameValidationBinding.ValidationRules.Add(new StringNotEmpty());
+            shiftNameTextBox.SetBinding(TextBox.TextProperty, shiftNameValidationBinding);
+
+            Binding startShiftValidationBinding = new Binding();
+            startShiftValidationBinding.Source = shiftViewSource;
+            startShiftValidationBinding.Path = new PropertyPath("StartShift");
+            startShiftValidationBinding.NotifyOnValidationError = true;
+            startShiftValidationBinding.Mode = BindingMode.TwoWay;
+            startShiftValidationBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            startShiftValidationBinding.ValidationRules.Add(new TimeValidator());
+            startShiftTextBox.SetBinding(TextBox.TextProperty, startShiftValidationBinding);
+
+            Binding endShiftValidationBinding = new Binding();
+            endShiftValidationBinding.Source = shiftViewSource;
+            endShiftValidationBinding.Path = new PropertyPath("EndShift");
+            endShiftValidationBinding.NotifyOnValidationError = true;
+            endShiftValidationBinding.Mode = BindingMode.TwoWay;
+            endShiftValidationBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            endShiftValidationBinding.ValidationRules.Add(new TimeValidator());
+            endShiftTextBox.SetBinding(TextBox.TextProperty, endShiftValidationBinding);
         }
     }
 }
